@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Rodrigo Menezes">
+	<link rel="icon" 
+	      type="image/ico" 
+	      href="/static/images/favicon.ico">
+	<title>Distributed Computing on the browser</title>
+</head>
+<body>
+	<h1>Distributed computing on the browser</h1>
+	<p>This is an experiment on massive distributing computing via the web browser by <a href="http://rmenez.es">Rodrigo Menezes</a>. I completed this project in May 2011 and was advised by Professor Brian Kernighan.</p>
+	{% if client.preferred_project %}
+	<p>Your current project is: {{ client.preferred_project.name }}</p>
+	{% endif %}
+	<p>Pick your preferred project</p>
+	<form method="POST" action="/">
+		<select name="project">
+			{% for project in projects %}
+			<option value="{{ project.project_id }}">{{ project.name }}</option>
+			{% endfor %}
+		</select>
+		<input type="submit" />
+	</form>
+</body>
+</html>

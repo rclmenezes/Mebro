@@ -1,0 +1,12 @@
+{% load cms_tags sekizai_tags %}
+<html>
+  <head>
+      {% render_block "css" %}
+  </head>
+  <body>
+      {% placeholder base_content %}
+      {% block base_content%}{% endblock %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+      {% render_block "js" %}
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Rodrigo Menezes">
+	<link rel="icon" 
+	      type="image/ico" 
+	      href="/static/images/favicon.ico">
+	<title>localStorage</title>
+
+	<!-- Load the workunit-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	
+		// Checks if has localStorage
+		var haslocalStorage = (function() {
+			try {
+		        localStorage.setItem('test', 'test');
+		        localStorage.removeItem('test');
+		        return true;
+		    } catch(e) {
+		        return false;
+		    }
+		}());
+		
+		// Checks if has data
+		var seti_data;
+		if (haslocalStorage) {
+			//localStorage.removeItem('seti_data');
+			seti_data = localStorage.getItem('seti_data');
+			if (seti_data == null)
+			{
+				console.log("Seti data is null.");
+				$.getScript("http://jp.rmenez.es/static/base64decoder.js", function() {
+					console.log("Script successfully loaded.");
+					$.ajax({
+						url: "http://jp.rmenez.es/media/seti_base64",
+						dataType: 'jsonp',
+						jsonpCallback: 'callback123',
+						success: function(data){
+							seti_data = decode64(data.seti);
+							localStorage.setItem('seti_data', seti_data);
+							console.log("Seti data is set");
+						}
+					});
+				});
+			}
+			else
+			{
+				console.log("Data already here!");
+			}
+		}
+	</script>
+</head>
+
+<body>
+	<h1>Local storage - getting data from crossDomain</h1>
+</body>
+</html>

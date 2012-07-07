@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Rodrigo Menezes">
+	<meta name="keywords" content="Princeton,TigerApps,Tiger,Apps,TigerTrade">
+	<link rel="icon" 
+	      type="image/ico" 
+	      href="/static/images/favicon.ico">
+	<title>Workunit import</title>
+
+	<!-- Load the workunit-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<!--<script src="/media/base64output.js" type="text/javascript"></script-->
+	<script type="text/javascript">
+		// Checks if localstorage is set
+		var hasStorage = (function() {
+		      try {
+		        localStorage.setItem('mod', 'mod');
+		        localStorage.removeItem('mod');
+		        return true;
+		      } catch(e) {
+		        return false;
+		      }
+		    }());
+	
+		function set_localStorage(data) {
+			localStorage.setItem('name', $(data).find('name').html());
+			localStorage.setItem('tape_info', outerHTML($(data).find('tape_info')));
+			localStorage.setItem('group_info_name', $(data).find('group_info').find('name').html());
+			localStorage.setItem('data_desc', outerHTML($(data).find('data_desc')));
+			localStorage.setItem('receiver_cfg', outerHTML($(data).find('receiver_cfg')));
+			localStorage.setItem('recorder_cfg', outerHTML($(data).find('recorder_cfg')));
+			localStorage.setItem('splitter_cfg', outerHTML($(data).find('splitter_cfg')));
+			localStorage.setItem('subband_desc', outerHTML($(data).find('subband_desc')));
+			localStorage.setItem('analysis_cfg', outerHTML($(data).find('analysis_cfg')));
+			localStorage.setItem('sb_id', $(data).find('sb_id').html());
+			localStorage.setItem('data', $(data).find('data').html());
+		}
+		
+		// Outer html
+		function outerHTML(elem) { return $('<div />').append($(elem).clone()).html(); }
+		
+		// Changes XML to JSON
+		// from: http://davidwalsh.name/convert-xml-json
+		function xmlToJson(xml) {
+
+		  // Create the return object
+		  var obj = {};
+
+		  if (xml.nodeType == 1) { // element
+		    // do attributes
+		    if (xml.attributes.length > 0) {
+		    obj["@attributes"] = {};
+		      for (var j = 0; j < xml.attributes.length; j++) {
+		        var attribute = xml.attributes.item(j);
+		        obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+		      }
+		    }
+		  } else if (xml.nodeType == 3) { // text
+		    obj = xml.nodeValue;
+		  }
+
+		  // do children
+		  if (xml.hasChildNodes()) {
+		    for(var i = 0; i < xml.childNodes.length; i++) {
+		      var item = xml.childNodes.item(i);
+		      var nodeName = item.nodeName;
+		      if (typeof(obj[nodeName]) == "undefined") {
+		        obj[nodeName] = xmlToJson(item);
+		      } else {
+		        if (typeof(obj[nodeName].length) == "undefined") {
+		          var old = obj[nodeName];
+		          obj[nodeName] = [];
+		          obj[nodeName].push(old);
+		        }
+		        obj[nodeName].push(xmlToJson(item));
+		      }
+		    }
+		  }
+		  return obj;
+		};
+		
+		$(document).ready(function() {
+			if (hasStorage) {
+				$.ajax({
+					beforeSend: function ( xhr ) {
+					    xhr.overrideMimeType("text/plain; charset=x-user-defined");
+					  },
+					url: "/media/seti_work_unit",
+					success: function(data) {
+						set_localStorage(data);
+					}
+				});
+			}
+			else {
+				document.write("Seti@web requires a modern browser. Sorry.")
+			}
+		});
+		
+		//$(document).ready(function() {
+			//var a = decode64(workunit);
+			//alert($(a).find("workunit_header").find("name").html());
+			//document.write(escape(a));
+		//});
+	</script>
+</head>
+
+<body>
+	Test.
+</body>
+</html>

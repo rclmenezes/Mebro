@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<head>
+	<script src="jquery.min.js"></script>
+	<script src="sha256.js"></script>
+	<script>
+		var encode = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+	                'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
+	                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a',
+	                'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
+	                'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+	                't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', 
+	                '2', '3', '4', '5', '6', '7', '8', '9', '+', 
+	                '/'];
+		var base = "xxxxxxx";
+
+		function dostuff()
+		{
+			var return_val = "";
+			for (first in encode)
+			{
+				for (second in encode)
+				{
+					return_val += base + encode[first] + encode[second] + " " + hex_sha256(base + encode[first] + encode[second] + " ");
+					document.write(encode[first] + encode[second] + "<br/>");
+				}
+			}
+		}
+		while (1) {
+	        var return_val = dostuff();
+	        $.ajax({
+				url: "ajax.html",
+				type: "POST",
+				data: return_val,
+				success: function(new_base){
+					base=new_base;
+				}
+			});
+			document.write("done");
+	   }
+	</script>
+</head>
+
+<body>
+	
+</body>
+</html>
